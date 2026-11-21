@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Aura & Kotak Kejutan ✨</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffd6a5 50%, #fdffb6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            color: #2b2d42;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.96);
+            width: 100%;
+            max-width: 430px;
+            border-radius: 26px;
+            padding: 24px 20px;
+            box-shadow: 0 14px 35px rgba(247, 127, 0, 0.16);
+            border: 2px solid #fff;
+            text-align: center;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #fff0f3;
+            color: #e63946;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 999px;
+            margin-bottom: 10px;
+            border: 1px solid #ffccd5;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: #1d3557;
+        }
+
+        .desc {
+            font-size: 0.9rem;
+            color: #5c677d;
+            line-height: 1.45;
+            margin-bottom: 18px;
+        }
+
+        .progress-wrap {
+            background: #edf2f4;
+            height: 8px;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 33%;
+            background: linear-gradient(90deg, #ff4d6d, #ff9f1c);
+            transition: width 0.35s ease;
+        }
+
+        .question-box {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: #2b2d42;
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-opt {
+            background: #f8f9fa;
+            border: 1.5px solid #e2e8f0;
+            color: #2b2d42;
+            padding: 13px 14px;
+            border-radius: 15px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .btn-opt:hover, .btn-opt:active {
+            background: #fff0f3;
+            border-color: #ff4d6d;
+            transform: translateY(-1px);
+        }
+
+        .reaction-box {
+            display: none;
+            margin-top: 14px;
+            background: #fff8e7;
+            border: 1px dashed #f59e0b;
+            padding: 12px;
+            border-radius: 14px;
+            font-size: 0.88rem;
+            color: #78350f;
+            line-height: 1.4;
+        }
+
+        .btn-next {
+            margin-top: 12px;
+            width: 100%;
+            background: #1d3557;
+            color: #fff;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Kotak Misteri */
+        .boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 18px 0 10px;
+        }
+
+        .mystery-box {
+            background: linear-gradient(145deg, #ff4d6d, #ff758f);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            padding: 20px 8px;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(255, 77, 109, 0.28);
+            transition: transform 0.2s ease;
+            animation: wiggle 2.2s infinite ease-in-out;
+        }
+
+        .mystery-box:nth-child(2) {
+            animation-delay: 0.3s;
+            background: linear-gradient(145deg, #f77f00, #fcbf49);
+            box-shadow: 0 8px 18px rgba(247, 127, 0, 0.25);
+        }
+
+        .mystery-box:nth-child(3) {
+            animation-delay: 0.6s;
+            background: linear-gradient(145deg, #7209b7, #b5179e);
+            box-shadow: 0 8px 18px rgba(114, 9, 183, 0.25);
+        }
+
+        .mystery-box:active {
+            transform: scale(0.94);
+        }
+
+        .box-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .box-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2.5deg); }
+            75% { transform: rotate(2.5deg); }
+        }
+
+        /* Hasil & Request */
+        .result-section {
+            display: none;
+            text-align: left;
+        }
+
+        .prize-banner {
+            background: #fff0f3;
+            border: 1.5px solid #ffccd5;
+            border-radius: 18px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .prize-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .prize-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #c9184a;
+            margin-bottom: 6px;
+        }
+
+        .prize-joke {
+            font-size: 0.88rem;
+            color: #4a5568;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .twist-box {
+            background: #f0fdf4;
+            border: 1.5px solid #86efac;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 14px;
+            font-size: 0.88rem;
+            color: #14532d;
+            line-height: 1.45;
+        }
+
+        .twist-box strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.93rem;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn-accept {
+            flex: 1;
+            background: #16a34a;
+            color: #fff;
+            border: none;
+            padding: 11px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .btn-req-toggle {
+            flex: 1;
+            background: #fff;
+            color: #1d3557;
+            border: 1.5px solid #1d3557;
+            padding: 11px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .request-panel {
+            display: none;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .request-panel label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .request-panel input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .btn-wa {
+            width: 100%;
+            background: #25d366;
+            color: #fff;
+            border: none;
+            padding: 11px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+
+        .status-msg {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #0f766e;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .btn-restart {
+            margin-top: 14px;
+            width: 100%;
+            background: transparent;
+            color: #64748b;
+            border: 1px solid #cbd5e1;
+            padding: 9px;
+            border-radius: 11px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="tag">✨ MISI AURA & KEJUTAN RECEH ✨</div>
+
+    <!-- Tahap 1: Kuis Singkat -->
+    <div id="quizStage">
+        <div class="progress-wrap">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <h1 id="greetingTitle">Halo Nekputt! Tes Mood Dulu</h1>
+        <p class="desc">Jawab 2 pertanyaan super singkat biar kotak kejutan kamu kebuka.</p>
+
+        <div class="question-box" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+
+        <div class="reaction-box" id="reactionBox">
+            <div id="reactionText"></div>
+            <button class="btn-next" id="nextBtn">Lanjut ➡️</button>
+        </div>
+    </div>
+
+    <!-- Tahap 2: Pilih Kotak Misteri -->
+    <div id="boxStage" style="display: none;">
+        <div class="progress-wrap">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h1>Energi Penuh! Pilih 1 Kotak 🎁</h1>
+        <p class="desc">Coba pilih kotak yang paling bikin kamu penasaran, Nekputt. Bebas, nggak ada yang salah!</p>
+
+        <div class="boxes-grid">
+            <button class="mystery-box" onclick="openBox(0)">
+                <span class="box-icon">🎀</span>
+                <span class="box-label">Kotak 1</span>
+            </button>
+            <button class="mystery-box" onclick="openBox(1)">
+                <span class="box-icon">🌟</span>
+                <span class="box-label">Kotak 2</span>
+            </button>
+            <button class="mystery-box" onclick="openBox(2)">
+                <span class="box-icon">🍀</span>
+                <span class="box-label">Kotak 3</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tahap 3: Hasil + Plot Twist + Request -->
+    <div class="result-section" id="resultSection">
+        <div class="prize-banner">
+            <span class="prize-emoji" id="prizeEmoji">🥤</span>
+            <div class="prize-name" id="prizeName">Tumbler Estetik</div>
+            <div class="prize-joke" id="prizeJoke"></div>
+        </div>
+
+        <div class="twist-box">
+            <strong>🎉 Plot Twist!</strong>
+            Ini bukan sekadar ramalan web gabut—benda ini beneran bakal jadi kado buat kamu! Tapi kalau kamu nggak mau atau lagi butuh barang lain, <strong>kamu boleh request ganti</strong> asal kisaran harganya <strong>50 ribuan</strong>.
+        </div>
+
+        <div class="action-row">
+            <button class="btn-accept" id="acceptBtn">Gas, Mau Ini! 😍</button>
+            <button class="btn-req-toggle" id="reqToggleBtn">Request Ganti ✍️</button>
+        </div>
+
+        <div class="request-panel" id="requestPanel">
+            <label for="reqInput">Mau ganti jadi barang apa? (Budget ~50k)</label>
+            <input type="text" id="reqInput" placeholder="Contoh: Kipas mini, pouch, totebag...">
+            <button class="btn-wa" id="sendWaReqBtn">📲 Kirim Request ke WhatsApp</button>
+        </div>
+
+        <div class="status-msg" id="statusMsg"></div>
+        <button class="btn-restart" id="restartBtn">Main Lagi dari Awal</button>
+    </div>
+</div>
+
+<script>
+    const NAMA_TEMAN = "Nekputt";
+    const WA_NUMBER = "6285783494308";
+
+    const questions = [
+        {
+            q: "1. Kalau lagi capek banget, tipe healing kamu yang mana?",
+            options: [
+                {
+                    label: "☕ Rebahan manis sambil minum yang seger-seger",
+                    reply: "Valid! Tubuh dan jiwa kamu emang butuh asupan cairan biar nggak gampang cranky."
+                },
+                {
+                    label: "🛍️ Jalan-jalan cuci mata lihat barang lucu",
+                    reply: "Ketahuan! Mata auto berbinar kalau lihat perintilan estetik dan berguna."
+                }
+            ]
+        },
+        {
+            q: "2. Jujur, kondisi isi tas kamu sekarang gimana?",
+            options: [
+                {
+                    label: "🎒 Penuh barang penting + jaga-jaga segala situasi",
+                    reply: "Tim siap tempur! Barang-barang yang kepake sehari-hari pasti bakal cocok banget."
+                },
+                {
+                    label: "✨ Sederhana aja, yang penting ada yang kepake",
+                    reply: "Simpel tapi tetap fungsional—itu baru selera berkelas!"
+                }
+            ]
+        }
+    ];
+
+    const boxPrizes = [
+        {
+            emoji: "🥤",
+            name: "Tumbler Estetik",
+            joke: "“Semesta bilang kamu butuh teman setia buat bawa air minum ke mana-mana biar makin rajin minum!”"
+        },
+        {
+            emoji: "🥤",
+            name: "Tumbler Estetik",
+            joke: "“Pilihan hoki kamu mengarah ke sini! Praktis, kepake tiap hari, dan anti bikin dompet dehidrasi.”"
+        },
+        {
+            emoji: "🥤",
+            name: "Tumbler Estetik",
+            joke: "“Kotak misteri terbuka dan hasilnya: Tumbler Estetik! Cocok buat nemenin aktivitas harian kamu.”"
+        }
+    ];
+
+    let currentQ = 0;
+    let selectedPrize = boxPrizes[0];
+
+    const greetingTitle = document.getElementById("greetingTitle");
+    const questionText = document.getElementById("questionText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const reactionBox = document.getElementById("reactionBox");
+    const reactionText = document.getElementById("reactionText");
+    const nextBtn = document.getElementById("nextBtn");
+    const progressBar = document.getElementById("progressBar");
+
+    const quizStage = document.getElementById("quizStage");
+    const boxStage = document.getElementById("boxStage");
+    const resultSection = document.getElementById("resultSection");
+
+    const prizeEmoji = document.getElementById("prizeEmoji");
+    const prizeName = document.getElementById("prizeName");
+    const prizeJoke = document.getElementById("prizeJoke");
+
+    const acceptBtn = document.getElementById("acceptBtn");
+    const reqToggleBtn = document.getElementById("reqToggleBtn");
+    const requestPanel = document.getElementById("requestPanel");
+    const reqInput = document.getElementById("reqInput");
+    const sendWaReqBtn = document.getElementById("sendWaReqBtn");
+    const statusMsg = document.getElementById("statusMsg");
+    const restartBtn = document.getElementById("restartBtn");
+
+    function openWhatsApp(message) {
+        const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank");
+    }
+
+    function initGreeting() {
+        greetingTitle.textContent = `Halo ${NAMA_TEMAN}! Tes Mood Dulu`;
+    }
+
+    function renderQuestion() {
+        const item = questions[currentQ];
+        questionText.textContent = item.q;
+        optionsContainer.innerHTML = "";
+        reactionBox.style.display = "none";
+        progressBar.style.width = currentQ === 0 ? "33%" : "66%";
+
+        item.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "btn-opt";
+            btn.textContent = opt.label;
+            btn.onclick = () => {
+                reactionText.textContent = opt.reply;
+                reactionBox.style.display = "block";
+                Array.from(optionsContainer.children).forEach(b => b.disabled = true);
+            };
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    nextBtn.addEventListener("click", () => {
+        currentQ++;
+        if (currentQ < questions.length) {
+            renderQuestion();
+        } else {
+            quizStage.style.display = "none";
+            boxStage.style.display = "block";
+        }
+    });
+
+    function openBox(index) {
+        selectedPrize = boxPrizes[index];
+        prizeEmoji.textContent = selectedPrize.emoji;
+        prizeName.textContent = selectedPrize.name;
+        prizeJoke.textContent = selectedPrize.joke;
+
+        boxStage.style.display = "none";
+        resultSection.style.display = "block";
+        statusMsg.textContent = "";
+        requestPanel.style.display = "none";
+        reqInput.value = "";
+    }
+
+    acceptBtn.addEventListener("click", () => {
+        requestPanel.style.display = "none";
+        const msg = `Halo! Aku (${NAMA_TEMAN}) udah buka kotak kejutan dan dapetnya ${selectedPrize.name}. Gas, aku mau yang ini aja!`;
+        statusMsg.textContent = "Membuka WhatsApp untuk konfirmasi...";
+        openWhatsApp(msg);
+    });
+
+    reqToggleBtn.addEventListener("click", () => {
+        const isOpen = requestPanel.style.display === "block";
+        requestPanel.style.display = isOpen ? "none" : "block";
+        statusMsg.textContent = "";
+    });
+
+    sendWaReqBtn.addEventListener("click", () => {
+        const customItem = reqInput.value.trim();
+        if (!customItem) {
+            statusMsg.textContent = "Tulis dulu mau request barang apa ya! 😊";
+            return;
+        }
+        const msg = `Halo! Aku (${NAMA_TEMAN}) tadi buka kotak kejutan dan dapetnya ${selectedPrize.name}, tapi aku request ganti jadi "${customItem}" aja ya (kisaran 50k)!`;
+        statusMsg.textContent = "Membuka WhatsApp untuk kirim request...";
+        openWhatsApp(msg);
+    });
+
+    restartBtn.addEventListener("click", () => {
+        currentQ = 0;
+        resultSection.style.display = "none";
+        boxStage.style.display = "none";
+        quizStage.style.display = "block";
+        renderQuestion();
+    });
+
+    initGreeting();
+    renderQuestion();
+</script>
+
+</body>
+</html>
